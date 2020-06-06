@@ -8,40 +8,51 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "ESTADO")
-public class Estado implements Serializable{
+@Table(name = "ORGANIZACAO")
+public class Organizacao implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	//Atrributes
+	//Attributes
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+	private String fotoPerfil;
+	private String descricao;
 	
 	//Associations
 	@JsonIgnore
-	@OneToMany(mappedBy = "estado")
-	private List<Cidade> cidades = new ArrayList<>();
+	@ManyToMany
+	@JoinTable(name="ORGANIZACAO_USUARIO",
+	joinColumns = @JoinColumn(name="organizacao_id"),
+	inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+	private List<Usuario> usuarios = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "organizacao")
+	private List<Telefone> telefonesOrganizacao = new ArrayList<>();
 	//Constructors and Overloads
-	public Estado() {
+	public Organizacao() {
 		
 	}
-	
-	//Getters and Setters
-	public Estado(Integer id, String nome) {
-		super();
+
+	public Organizacao(Integer id, String nome, String fotoPerfil, String descricao) {
 		this.id = id;
 		this.nome = nome;
+		this.fotoPerfil = fotoPerfil;
+		this.descricao = descricao;
 	}
 
+	//Getters and Setters
 	public Integer getId() {
 		return id;
 	}
@@ -58,12 +69,28 @@ public class Estado implements Serializable{
 		this.nome = nome;
 	}
 
-	public List<Cidade> getCidades() {
-		return cidades;
+	public String getFotoPerfil() {
+		return fotoPerfil;
 	}
 
-	public void setCidades(List<Cidade> cidades) {
-		this.cidades = cidades;
+	public void setFotoPerfil(String fotoPerfil) {
+		this.fotoPerfil = fotoPerfil;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public List<Usuario> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 
 	//HashCode and Equals
@@ -83,7 +110,7 @@ public class Estado implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Estado other = (Estado) obj;
+		Organizacao other = (Organizacao) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
