@@ -35,7 +35,10 @@ public class Usuario implements Serializable{
 	private List<Telefone> telefones = new ArrayList<>();
 	
 	@ManyToMany(mappedBy = "usuarios")
-	private List<Organizacao> organizacao;
+	private List<Organizacao> organizacao = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "usuarioEndereco")
+	private List<Endereco> enderecosUsuario = new ArrayList<>();
 	
 	//Constructors and Overloads
 	public Usuario() {
@@ -106,6 +109,22 @@ public class Usuario implements Serializable{
 
 	public void setTelefones(List<Telefone> telefones) {
 		this.telefones = telefones;
+	}
+
+	public List<Organizacao> getOrganizacao() {
+		return organizacao;
+	}
+
+	public void setOrganizacao(List<Organizacao> organizacao) {
+		this.organizacao = organizacao;
+	}
+
+	public List<Endereco> getEnderecosUsuario() {
+		return enderecosUsuario;
+	}
+
+	public void setEnderecosUsuario(List<Endereco> enderecosUsuario) {
+		this.enderecosUsuario = enderecosUsuario;
 	}
 
 	//HashCode and Equals

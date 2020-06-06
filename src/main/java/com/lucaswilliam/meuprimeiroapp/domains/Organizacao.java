@@ -40,6 +40,10 @@ public class Organizacao implements Serializable{
 	
 	@OneToMany(mappedBy = "organizacao")
 	private List<Telefone> telefonesOrganizacao = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "organizacaoEndereco")
+	private List<Endereco> enderecos = new ArrayList<>();
+	
 	//Constructors and Overloads
 	public Organizacao() {
 		
@@ -91,6 +95,22 @@ public class Organizacao implements Serializable{
 
 	public void setUsuarios(List<Usuario> usuarios) {
 		this.usuarios = usuarios;
+	}
+
+	public List<Telefone> getTelefonesOrganizacao() {
+		return telefonesOrganizacao;
+	}
+
+	public void setTelefonesOrganizacao(List<Telefone> telefonesOrganizacao) {
+		this.telefonesOrganizacao = telefonesOrganizacao;
+	}
+  
+	public List<Endereco> getEnderecos() {
+		return enderecos;
+	}
+
+	public void setEnderecos(List<Endereco> enderecos) {
+		this.enderecos = enderecos;
 	}
 
 	//HashCode and Equals
