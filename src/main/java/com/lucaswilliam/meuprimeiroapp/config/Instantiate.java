@@ -1,6 +1,8 @@
 package com.lucaswilliam.meuprimeiroapp.config;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -10,13 +12,16 @@ import com.lucaswilliam.meuprimeiroapp.domains.Cidade;
 import com.lucaswilliam.meuprimeiroapp.domains.Endereco;
 import com.lucaswilliam.meuprimeiroapp.domains.Estado;
 import com.lucaswilliam.meuprimeiroapp.domains.Organizacao;
+import com.lucaswilliam.meuprimeiroapp.domains.Tarefa;
 import com.lucaswilliam.meuprimeiroapp.domains.Telefone;
 import com.lucaswilliam.meuprimeiroapp.domains.Usuario;
 import com.lucaswilliam.meuprimeiroapp.domains.enums.TipoCargo;
+import com.lucaswilliam.meuprimeiroapp.domains.enums.TipoPrioridade;
 import com.lucaswilliam.meuprimeiroapp.repositories.CidadeRepository;
 import com.lucaswilliam.meuprimeiroapp.repositories.EnderecoRepository;
 import com.lucaswilliam.meuprimeiroapp.repositories.EstadoRepository;
 import com.lucaswilliam.meuprimeiroapp.repositories.OrganizacaoRepository;
+import com.lucaswilliam.meuprimeiroapp.repositories.TarefaRepository;
 import com.lucaswilliam.meuprimeiroapp.repositories.TelefoneRepository;
 import com.lucaswilliam.meuprimeiroapp.repositories.UsuarioRepository;
 
@@ -42,6 +47,9 @@ public class Instantiate implements CommandLineRunner{
 	@Autowired
 	private EnderecoRepository enderecoRepository;
 	
+	@Autowired
+	private TarefaRepository tarefaRepository;
+	
 	@Override
 	public void run(String... args) throws Exception {
 		//Instanciando Usuario, Organização e Telefone
@@ -55,17 +63,17 @@ public class Instantiate implements CommandLineRunner{
 		Telefone tel3 = new Telefone(null, 83, "86489658", u1, null);
 		Telefone tel4 = new Telefone(null, 82, "33334582", null, o1);
 		
-		u1.getOrganizacao().addAll(Arrays.asList(o1));
-		u2.getOrganizacao().addAll(Arrays.asList(o1));
+		u1.getOrganizacoes().addAll(Arrays.asList(o1));
+		u2.getOrganizacoes().addAll(Arrays.asList(o1));
+		
+		o1.getUsuarios().addAll(Arrays.asList(u1, u2));
 		
 		u1.getTelefones().addAll(Arrays.asList(tel1, tel3));
 		u2.getTelefones().addAll(Arrays.asList(tel2));
 		o1.getTelefonesOrganizacao().addAll(Arrays.asList(tel4));
 		
-		o1.getUsuarios().addAll(Arrays.asList(u1, u2));
-		
-		usuarioRepository.saveAll(Arrays.asList(u1, u2));
 		organizacaoRepository.saveAll(Arrays.asList(o1));
+		usuarioRepository.saveAll(Arrays.asList(u1, u2));
 		telefoneRepository.saveAll(Arrays.asList(tel1, tel2, tel3, tel4));
 		
 		//Instanciando Cidade, Estado e Endereco
@@ -88,11 +96,19 @@ public class Instantiate implements CommandLineRunner{
 		u2.getEnderecosUsuario().addAll(Arrays.asList(end2));
 		o1.getEnderecos().addAll(Arrays.asList(end3));
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		
+		Tarefa t1 = new Tarefa(null, "Corrigir Domain Cliente", "Por favor verificar exceções", null, null, new Date(), sdf.parse("11/10/2020"), TipoPrioridade.NORMAL, null);
+		t1.getUsuario().addAll(Arrays.asList(u1, u2));
+		u1.getTarefas().addAll(Arrays.asList(t1));
+		u2.getTarefas().addAll(Arrays.asList(t1));
+		
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(cid1, cid2, cid3));
 		enderecoRepository.saveAll(Arrays.asList(end1, end2, end3));
-		usuarioRepository.saveAll(Arrays.asList(u1, u2));
 		organizacaoRepository.saveAll(Arrays.asList(o1));
+		usuarioRepository.saveAll(Arrays.asList(u1, u2));
+		tarefaRepository.saveAll(Arrays.asList(t1));
 	}
 
 }

@@ -8,10 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lucaswilliam.meuprimeiroapp.domains.enums.TipoCargo;
 
 @Entity
@@ -34,11 +37,19 @@ public class Usuario implements Serializable{
 	@OneToMany(mappedBy = "usuario")
 	private List<Telefone> telefones = new ArrayList<>();
 	
-	@ManyToMany(mappedBy = "usuarios")
-	private List<Organizacao> organizacao = new ArrayList<>();
+	@ManyToMany
+	@JoinTable(name="ORGANIZACAO_USUARIO",
+	joinColumns = @JoinColumn(name="usuario_id"),
+	inverseJoinColumns = @JoinColumn(name = "organizacao_id"))
+	private List<Organizacao> organizacoes = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "usuarioEndereco")
 	private List<Endereco> enderecosUsuario = new ArrayList<>();
+	
+	@JsonIgnore
+	@ManyToMany(mappedBy = "usuario")
+	private List<Tarefa> tarefas = new ArrayList<>();
+	
 	
 	//Constructors and Overloads
 	public Usuario() {
@@ -111,12 +122,12 @@ public class Usuario implements Serializable{
 		this.telefones = telefones;
 	}
 
-	public List<Organizacao> getOrganizacao() {
-		return organizacao;
+	public List<Organizacao> getOrganizacoes() {
+		return organizacoes;
 	}
 
-	public void setOrganizacao(List<Organizacao> organizacao) {
-		this.organizacao = organizacao;
+	public void setOrganizacoes(List<Organizacao> organizacoes) {
+		this.organizacoes = organizacoes;
 	}
 
 	public List<Endereco> getEnderecosUsuario() {
@@ -125,6 +136,14 @@ public class Usuario implements Serializable{
 
 	public void setEnderecosUsuario(List<Endereco> enderecosUsuario) {
 		this.enderecosUsuario = enderecosUsuario;
+	}
+	
+	public List<Tarefa> getTarefas() {
+		return tarefas;
+	}
+
+	public void setTarefas(List<Tarefa> tarefas) {
+		this.tarefas = tarefas;
 	}
 
 	//HashCode and Equals

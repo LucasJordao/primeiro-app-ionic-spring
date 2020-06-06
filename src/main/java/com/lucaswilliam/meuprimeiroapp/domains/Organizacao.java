@@ -32,10 +32,7 @@ public class Organizacao implements Serializable{
 	
 	//Associations
 	@JsonIgnore
-	@ManyToMany
-	@JoinTable(name="ORGANIZACAO_USUARIO",
-	joinColumns = @JoinColumn(name="organizacao_id"),
-	inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+	@ManyToMany(mappedBy = "organizacoes")
 	private List<Usuario> usuarios = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "organizacao")

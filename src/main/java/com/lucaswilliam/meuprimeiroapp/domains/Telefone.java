@@ -31,6 +31,7 @@ public class Telefone implements Serializable{
 	@JoinColumn(name = "usuario_id")
 	private Usuario usuario;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "organizacao_id")
 	private Organizacao organizacao;
