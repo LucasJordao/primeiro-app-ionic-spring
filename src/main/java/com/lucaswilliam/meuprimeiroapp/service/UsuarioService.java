@@ -52,7 +52,7 @@ public class UsuarioService {
 	}
 
 	/**
-	 * Metodo responsável por recuperar uma usuario do banco de dados
+	 * Metodo responsável por recuperar um usuario do banco de dados
 	 * 
 	 * @param id
 	 * @exception ObjectNotFoundException
@@ -72,7 +72,7 @@ public class UsuarioService {
 	 */
 	public void update(Usuario obj) {
 		Usuario newObj = this.findById(obj.getId());
-		this.updateData(obj, newObj);
+		updateData(obj, newObj);
 		repo.save(newObj);
 	}
 

@@ -81,4 +81,6 @@ public class UsuarioResource {
 		
 		return ResponseEntity.created(uri).build();
 	}
+	
+	
 }

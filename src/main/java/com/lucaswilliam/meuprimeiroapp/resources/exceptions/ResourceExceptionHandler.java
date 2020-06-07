@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.lucaswilliam.meuprimeiroapp.service.exceptions.DataIntegrityException;
 import com.lucaswilliam.meuprimeiroapp.service.exceptions.ObjectNotFoundException;
+import com.lucaswilliam.meuprimeiroapp.service.exceptions.ParseDateException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
@@ -29,4 +30,11 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(code).body(err);
 	}
 	
+	@ExceptionHandler(ParseDateException.class)
+	public ResponseEntity<StandardError> ParseDateException(ParseDateException e, HttpServletRequest http){
+		HttpStatus code = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(code.value(), e.getMessage(), http.getRequestURI(), System.currentTimeMillis());
+		
+		return ResponseEntity.status(code).body(err);
+	}
 }
