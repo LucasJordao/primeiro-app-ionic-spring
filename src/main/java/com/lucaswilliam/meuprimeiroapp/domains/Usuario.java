@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,7 +35,7 @@ public class Usuario implements Serializable{
 	private String fotoPerfil;
 	
 	//Associations
-	@OneToMany(mappedBy = "usuario")
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "usuario")
 	private List<Telefone> telefones = new ArrayList<>();
 	
 	@ManyToMany
@@ -43,7 +44,7 @@ public class Usuario implements Serializable{
 	inverseJoinColumns = @JoinColumn(name = "organizacao_id"))
 	private List<Organizacao> organizacoes = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "usuarioEndereco")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarioEndereco")
 	private List<Endereco> enderecosUsuario = new ArrayList<>();
 	
 	@JsonIgnore
