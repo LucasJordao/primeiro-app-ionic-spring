@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +57,7 @@ public class TarefaResource {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody TarefaUpdateDTO objDTO){
+	public ResponseEntity<Void> update(@PathVariable Integer id, @Valid @RequestBody TarefaUpdateDTO objDTO){
 		objDTO.setId(id);
 		Tarefa obj = service.fromDTO(objDTO);
 		service.update(obj);
@@ -64,7 +66,7 @@ public class TarefaResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Void> update(@RequestBody TarefaNewDTO objDto){
+	public ResponseEntity<Void> update(@Valid @RequestBody TarefaNewDTO objDto){
 		Tarefa obj = service.fromDTO(objDto);
 		obj = service.insert(obj);
 		

@@ -2,6 +2,12 @@ package com.lucaswilliam.meuprimeiroapp.domains.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.lucaswilliam.meuprimeiroapp.domains.enums.TipoPrioridade;
 
 public class TarefaNewDTO implements Serializable {
@@ -10,15 +16,23 @@ public class TarefaNewDTO implements Serializable {
 
 	// Attributes
 	private Integer id;
+	@NotEmpty(message="O campo não pode ser vazio")
+	@Size(min=10, max=180, message="O tamanho tem que ser entre 10 e 180")
 	private String titulo;
+	@Size(min=10, max=580, message="O tamanho tem que ser entre 10 e 180")
 	private String conteudo;
+	@NotEmpty(message="O campo não pode ser vazio")
 	private String dataPrazo;
+	@Min(value = 0)
+	@Max(value = 3)
+	@NotNull(message = "Esse campo não pode ser vazio")
 	private Integer prioridade;
 	private String concluido;
 	private String anexoFuncionario;
 	private String anexoChefe;
-	
+	@NotNull(message = "Esse campo não pode ser vazio")
 	private Integer chefe;
+	@NotNull(message = "Esse campo não pode ser vazio")
 	private Integer funcionario;
 	
 	// Constructors and overloads

@@ -121,6 +121,12 @@ public class UsuarioService {
 		return user;
 	}
 
+	public List<Usuario> search(String nome){
+		List<Usuario> list = repo.search(nome);
+		
+		return list;
+	}
+	
 	// Methods aux
 	private static void updateData(Usuario obj, Usuario newObj) {
 		if (obj.getNome() != null) {

@@ -3,6 +3,8 @@ package com.lucaswilliam.meuprimeiroapp.domains.dto;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 
+import javax.validation.constraints.Size;
+
 import com.lucaswilliam.meuprimeiroapp.domains.Tarefa;
 import com.lucaswilliam.meuprimeiroapp.domains.enums.TipoPrioridade;
 
@@ -14,7 +16,9 @@ public class TarefaUpdateDTO implements Serializable{
 
 	//Attributes
 	private Integer id;
+	@Size(min=10, max=180, message="O tamanho tem que ser entre 10 e 180")
 	private String titulo;
+	@Size(min=10, max=580, message="O tamanho tem que ser entre 10 e 180")
 	private String conteudo;
 	private String dataPrazo;
 	private Integer prioridade;

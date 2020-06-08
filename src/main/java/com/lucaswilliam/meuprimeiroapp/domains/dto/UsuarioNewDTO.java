@@ -2,32 +2,54 @@ package com.lucaswilliam.meuprimeiroapp.domains.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.lucaswilliam.meuprimeiroapp.domains.Telefone;
 import com.lucaswilliam.meuprimeiroapp.domains.Usuario;
 import com.lucaswilliam.meuprimeiroapp.domains.enums.TipoCargo;
+import com.lucaswilliam.meuprimeiroapp.service.validation.InsertUsuario;
 
+@InsertUsuario
 public class UsuarioNewDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	//Attributes
+	@NotEmpty(message = "Campo não pode ser vazio")
+	@Size(min = 7, max = 80, message = "O tamanho tem que ser entre 7 e 80")
 	private String nome;
+	@NotEmpty(message = "Campo não pode ser vazio")
+	@Email(message = "Email inválido")
+	@Size(min = 7, max = 80, message = "O tamanho tem que ser entre 7 e 80")
 	private String email;
+	@Size(min = 8, max = 80, message = "O tamanho tem que ser entre 8 e 80")
+	@NotEmpty(message = "Campo não pode ser vazio")
 	private String senha;
+	@NotNull(message = "Campo não pode ser vazio")
 	private Integer cargo;
 	private String fotoPerfil;
 	
+	@NotNull(message = "Campo não pode ser vazio")
 	private Telefone telefone1;
 	private Telefone telefone2;
 	private Telefone telefone3;
 	
+	@NotEmpty(message = "Campo não pode ser vazio")
 	private String logradouro;
+	@NotEmpty(message = "Campo não pode ser vazio")
 	private String cep;
 	private String complemento;
+	@NotEmpty(message = "Campo não pode ser vazio")
 	private String numero;
+	@NotEmpty(message = "Campo não pode ser vazio")
 	private String bairro;
 	
+	@NotNull(message = "Campo não pode ser vazio")
 	private Integer cidadeId;
+	@NotNull(message = "Campo não pode ser vazio")
 	private Integer organizacaoId;
 	
 	//Constructors and Overloads

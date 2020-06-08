@@ -2,16 +2,26 @@ package com.lucaswilliam.meuprimeiroapp.domains.dto;
 
 import java.io.Serializable;
 
-import com.lucaswilliam.meuprimeiroapp.domains.Usuario;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
+import com.lucaswilliam.meuprimeiroapp.domains.Usuario;
+import com.lucaswilliam.meuprimeiroapp.service.validation.UpdateUsuario;
+
+@UpdateUsuario
 public class UsuarioDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	//Attributes
 	private Integer id;
+	@Size(min = 7, max = 80, message = "O tamanho tem que ser entre 7 e 80")
 	private String nome;
+	@NotEmpty(message = "Campo não pode ser vazio")
+	@Email(message = "Email inválido")
 	private String email;
+	@Size(min = 8, max = 80, message = "O tamanho tem que ser entre 8 e 80")
 	private String senha;
 	private Integer cargo;
 	private String fotoPerfil;

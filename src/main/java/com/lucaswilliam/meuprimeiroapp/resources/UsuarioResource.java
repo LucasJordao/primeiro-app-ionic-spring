@@ -3,6 +3,8 @@ package com.lucaswilliam.meuprimeiroapp.resources;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +48,7 @@ public class UsuarioResource {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody UsuarioDTO objDTO){
+	public ResponseEntity<Void> update(@PathVariable Integer id,@Valid @RequestBody UsuarioDTO objDTO){
 		objDTO.setId(id);
 		Usuario obj = service.fromDTO(objDTO);
 		service.update(obj);
@@ -74,7 +76,7 @@ public class UsuarioResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Void> insert(@RequestBody UsuarioNewDTO obj){
+	public ResponseEntity<Void> insert(@Valid @RequestBody UsuarioNewDTO obj){
 		Usuario user = service.insert(service.fromNewDTO(obj));
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
@@ -82,5 +84,10 @@ public class UsuarioResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	
+	@GetMapping(value = "/organizacoes/{nome}")
+	public ResponseEntity<List<Usuario>> search(@PathVariable String nome){
+		List<Usuario> list = service.search(nome);
+		
+		return ResponseEntity.ok().body(list);
+	}
 }

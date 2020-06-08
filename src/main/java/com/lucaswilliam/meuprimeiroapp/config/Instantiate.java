@@ -57,6 +57,8 @@ public class Instantiate implements CommandLineRunner{
 		Usuario u2 = new Usuario(null, "Marcos Santos", "marcos@hotmail.com", "123", TipoCargo.FUNCIONARIO, null);
 		
 		Organizacao o1 = new Organizacao(null, "Energisa", null, "Trazendo energia desde 1989");
+		Organizacao o2 = new Organizacao(null, "LG", null, "Fazendo sua imagem melhor");
+		Organizacao o3 = new Organizacao(null, "Semp", null, "Qualidade de ponta");
 		
 		Telefone tel1 = new Telefone(null, 83, "88174566", u1, null);
 		Telefone tel2 = new Telefone(null, 83, "40028922", u2, null);
@@ -72,7 +74,7 @@ public class Instantiate implements CommandLineRunner{
 		u2.getTelefones().addAll(Arrays.asList(tel2));
 		o1.getTelefonesOrganizacao().addAll(Arrays.asList(tel4));
 		
-		organizacaoRepository.saveAll(Arrays.asList(o1));
+		organizacaoRepository.saveAll(Arrays.asList(o1, o2, o3));
 		usuarioRepository.saveAll(Arrays.asList(u1, u2));
 		telefoneRepository.saveAll(Arrays.asList(tel1, tel2, tel3, tel4));
 		
