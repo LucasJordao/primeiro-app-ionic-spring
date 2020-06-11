@@ -86,15 +86,15 @@ public class UsuarioResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@GetMapping(value = "/organizacoes/{nome}")
-	public ResponseEntity<List<Usuario>> search(@PathVariable String nome){
+	@GetMapping(value = "/organizacoes")
+	public ResponseEntity<List<Usuario>> search(@RequestParam(name = "nome") String nome){
 		List<Usuario> list = service.search(nome);
 		
 		return ResponseEntity.ok().body(list);
 	}
 	
-	@GetMapping(value = "/funcionarios/{org}")
-	public ResponseEntity<List<Usuario>> serachFuncionario(@PathVariable String org){
+	@GetMapping(value = "/funcionarios")
+	public ResponseEntity<List<Usuario>> serachFuncionario(@RequestParam(name = "org")  String org){
 		List<Usuario> list = service.searchFuncionario(org);
 		
 		return ResponseEntity.ok().body(list);
