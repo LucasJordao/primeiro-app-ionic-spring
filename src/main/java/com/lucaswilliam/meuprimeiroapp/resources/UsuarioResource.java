@@ -2,6 +2,7 @@ package com.lucaswilliam.meuprimeiroapp.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lucaswilliam.meuprimeiroapp.domains.Usuario;
 import com.lucaswilliam.meuprimeiroapp.domains.dto.UsuarioDTO;
+import com.lucaswilliam.meuprimeiroapp.domains.dto.UsuarioListDTO;
 import com.lucaswilliam.meuprimeiroapp.domains.dto.UsuarioNewDTO;
 import com.lucaswilliam.meuprimeiroapp.service.UsuarioService;
 
@@ -33,10 +35,10 @@ public class UsuarioResource {
 	
 	//EndPoints (Rotas)
 	@GetMapping
-	public ResponseEntity<List<Usuario>> findAll(){
+	public ResponseEntity<List<UsuarioListDTO>> findAll(){
 		List<Usuario> lista = service.findAll();
-		
-		return ResponseEntity.ok().body(lista);
+		List<UsuarioListDTO> list = lista.stream().map(x -> new UsuarioListDTO(x)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(list);
 	}
 	
 	

@@ -30,19 +30,19 @@ public class ProdInstantiateService {
 	
 	public void instantiate() {
 		
-		Usuario user = new Usuario(null, "Lucas William Silva Jorão", "lucaswill12@hotmail.com", "senha123", TipoCargo.CHEFE, null, true);
-		Organizacao o1 = new Organizacao(null, "Catrix", null, "Empresa de softwares");
-		user.getOrganizacoes().add(o1);
-		o1.getUsuarios().add(user);
-		Telefone tel1 = new Telefone(null, 83, "986679667", user, null);
-		user.getTelefones().add(tel1);
-		Optional<Cidade> cid1 = cidadeRepository.findById(1294);
-		Endereco e1 = new Endereco(null, "Sabará", "58421760", "Rua", "30","Cidades", user, cid1.get() ,null);
-		
-		user.getEnderecosUsuario().add(e1);
-		
-		organizacaoRepository.save(o1);
-		usuarioRepository.saveAll(Arrays.asList(user));
+//		Usuario user = new Usuario(null, "Lucas William Silva Jorão", "lucaswill12@hotmail.com", "senha123", TipoCargo.CHEFE, null, true);
+//		Organizacao o1 = new Organizacao(null, "Catrix", null, "Empresa de softwares");
+//		user.getOrganizacoes().add(o1);
+//		o1.getUsuarios().add(user);
+//		Telefone tel1 = new Telefone(null, 83, "986679667", user, null);
+//		user.getTelefones().add(tel1);
+//		Optional<Cidade> cid1 = cidadeRepository.findById(1294);
+//		Endereco e1 = new Endereco(null, "Sabará", "58421760", "Rua", "30","Cidades", user, cid1.get() ,null);
+//		
+//		user.getEnderecosUsuario().add(e1);
+//		
+//		organizacaoRepository.save(o1);
+//		usuarioRepository.saveAll(Arrays.asList(user));
 	}
 	
 }
