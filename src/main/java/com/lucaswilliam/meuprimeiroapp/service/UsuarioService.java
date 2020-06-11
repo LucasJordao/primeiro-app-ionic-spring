@@ -127,6 +127,12 @@ public class UsuarioService {
 		return list;
 	}
 	
+	public List<Usuario> searchFuncionario(String nome){
+		List<Usuario> list = repo.searchFuncionario(nome);
+		
+		return list;
+	}
+	
 	// Methods aux
 	private static void updateData(Usuario obj, Usuario newObj) {
 		if (obj.getNome() != null) {
@@ -144,11 +150,12 @@ public class UsuarioService {
 		if (obj.getFotoPerfil() != null) {
 			newObj.setFotoPerfil(obj.getFotoPerfil());
 		}
+		obj.setPrimeiroAcesso(false);
 	}
 
 	public Usuario fromDTO(UsuarioDTO objDTO) {
 		return new Usuario(objDTO.getId(), objDTO.getNome(), objDTO.getEmail(), objDTO.getSenha(),
-				TipoCargo.toEnum(objDTO.getCargo()), null);
+				TipoCargo.toEnum(objDTO.getCargo()), null, objDTO.getPrimeiroAcesso());
 	}
 
 	/**
@@ -158,7 +165,7 @@ public class UsuarioService {
 	 */
 	public Usuario fromNewDTO(UsuarioNewDTO objDTO) {
 		Usuario user = new Usuario(null, objDTO.getNome(), objDTO.getEmail(), objDTO.getSenha(), objDTO.getCargo(),
-				objDTO.getFotoPerfil());
+				objDTO.getFotoPerfil(), true);
 		Endereco end = new Endereco(null, objDTO.getLogradouro(), objDTO.getCep(), objDTO.getComplemento(), objDTO.getNumero(), objDTO.getBairro(), user, new Cidade(objDTO.getCidadeId(), null,null), null);
 		
 		Optional<Organizacao> org1 = organizacaoRepository.findById(objDTO.getOrganizacaoId());

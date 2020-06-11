@@ -25,6 +25,7 @@ public class UsuarioDTO implements Serializable{
 	private String senha;
 	private Integer cargo;
 	private String fotoPerfil;
+	private boolean primeiroAcesso;
 	
 	//Constructor and overloads
 	public UsuarioDTO() {
@@ -38,15 +39,17 @@ public class UsuarioDTO implements Serializable{
 		this.senha = obj.getSenha();
 		this.cargo = obj.getCargo().getCode();
 		this.fotoPerfil = obj.getFotoPerfil();
+		this.primeiroAcesso = obj.getPrimeiroAcesso();
 	}
 	
-	public UsuarioDTO(Integer id, String nome, String email, String senha, Integer cargo, String fotoPerfil) {
+	public UsuarioDTO(Integer id, String nome, String email, String senha, Integer cargo, String fotoPerfil, boolean primeiroAcesso) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
 		this.cargo = cargo;
 		this.fotoPerfil = fotoPerfil;
+		this.primeiroAcesso = primeiroAcesso;
 	}
 
 	//Getters and Setters
@@ -97,4 +100,14 @@ public class UsuarioDTO implements Serializable{
 	public void setFotoPerfil(String fotoPerfil) {
 		this.fotoPerfil = fotoPerfil;
 	}
+
+	public boolean getPrimeiroAcesso() {
+		return primeiroAcesso;
+	}
+
+	public void setPrimeiroAcesso(boolean primeiroAcesso) {
+		this.primeiroAcesso = primeiroAcesso;
+	}
+	
+	
 }

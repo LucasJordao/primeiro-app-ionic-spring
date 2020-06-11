@@ -33,6 +33,7 @@ public class Usuario implements Serializable{
 	private String senha;
 	private Integer cargo;
 	private String fotoPerfil;
+	private boolean primeiroAcesso;
 	
 	//Associations
 	@OneToMany(cascade = CascadeType.ALL,mappedBy = "usuario")
@@ -57,13 +58,14 @@ public class Usuario implements Serializable{
 		
 	}
 
-	public Usuario(Integer id, String nome, String email, String senha, TipoCargo cargo, String fotoPerfil) {
+	public Usuario(Integer id, String nome, String email, String senha, TipoCargo cargo, String fotoPerfil, boolean primeiroAcesso) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
 		this.cargo = (cargo == null) ? null : cargo.getCode();
 		this.fotoPerfil = fotoPerfil;
+		this.primeiroAcesso = primeiroAcesso;
 	}
 
 	//Getters and Setters
@@ -145,6 +147,14 @@ public class Usuario implements Serializable{
 
 	public void setTarefas(List<Tarefa> tarefas) {
 		this.tarefas = tarefas;
+	}
+	
+	public boolean getPrimeiroAcesso() {
+		return primeiroAcesso;
+	}
+
+	public void setPrimeiroAcesso(boolean primeiroAcesso) {
+		this.primeiroAcesso = primeiroAcesso;
 	}
 
 	//HashCode and Equals

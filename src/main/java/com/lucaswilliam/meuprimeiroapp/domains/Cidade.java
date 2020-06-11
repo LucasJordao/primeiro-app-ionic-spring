@@ -21,6 +21,7 @@ public class Cidade implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+	private String codigo;
 	
 	//Associations
 	@ManyToOne
@@ -62,6 +63,14 @@ public class Cidade implements Serializable{
 
 	public void setEstado(Estado estado) {
 		this.estado = estado;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	//HashCode and Equals

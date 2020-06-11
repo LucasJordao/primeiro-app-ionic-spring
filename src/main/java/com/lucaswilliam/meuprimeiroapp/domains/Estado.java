@@ -24,6 +24,8 @@ public class Estado implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+	private String uf;
+	private Integer regiao;
 	
 	//Associations
 	@JsonIgnore
@@ -36,10 +38,11 @@ public class Estado implements Serializable{
 	}
 	
 	//Getters and Setters
-	public Estado(Integer id, String nome) {
-		super();
+	public Estado(Integer id, String nome, String uf, Integer regiao) {
 		this.id = id;
 		this.nome = nome;
+		this.uf = uf;
+		this.regiao = regiao;
 	}
 
 	public Integer getId() {
@@ -64,6 +67,22 @@ public class Estado implements Serializable{
 
 	public void setCidades(List<Cidade> cidades) {
 		this.cidades = cidades;
+	}
+
+	public String getUf() {
+		return uf;
+	}
+
+	public void setUf(String uf) {
+		this.uf = uf;
+	}
+
+	public Integer getRegiao() {
+		return regiao;
+	}
+
+	public void setRegiao(Integer regiao) {
+		this.regiao = regiao;
 	}
 
 	//HashCode and Equals

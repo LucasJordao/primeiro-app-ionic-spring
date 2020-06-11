@@ -90,4 +90,11 @@ public class UsuarioResource {
 		
 		return ResponseEntity.ok().body(list);
 	}
+	
+	@GetMapping(value = "/funcionarios/{org}")
+	public ResponseEntity<List<Usuario>> serachFuncionario(@PathVariable String org){
+		List<Usuario> list = service.searchFuncionario(org);
+		
+		return ResponseEntity.ok().body(list);
+	}
 }

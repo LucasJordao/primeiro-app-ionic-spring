@@ -17,4 +17,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
 	@Transactional(readOnly = true)
 	@Query("SELECT DISTINCT obj FROM Usuario obj INNER JOIN obj.organizacoes org WHERE LOWER(org.nome) = LOWER(:nome)")
 	List<Usuario> search(@Param("nome") String nome);
+	
+	@Transactional(readOnly = true)
+	@Query("SELECT DISTINCT obj FROM Usuario obj INNER JOIN obj.organizacoes org WHERE LOWER(org.nome) = LOWER(:nome) AND obj.cargo = 1")
+	List<Usuario> searchFuncionario(@Param("nome") String nome);
 }

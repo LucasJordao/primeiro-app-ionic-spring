@@ -30,7 +30,7 @@ public class UsuarioValidator implements ConstraintValidator<InsertUsuario, Usua
 		
 		Usuario user = repository.findByEmail(value.getEmail());
 		
-		if(user != null && value.getEmail().equals(user.getEmail())) {
+		if(user != null && value.getEmail().toLowerCase().equals(user.getEmail().toLowerCase())) {
 			list.add(new FieldMessage("email", "Email já em uso"));
 		}
 		
