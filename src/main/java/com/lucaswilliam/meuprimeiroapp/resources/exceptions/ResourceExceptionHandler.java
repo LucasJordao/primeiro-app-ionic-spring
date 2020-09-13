@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.lucaswilliam.meuprimeiroapp.service.exceptions.DataIntegrityException;
+import com.lucaswilliam.meuprimeiroapp.service.exceptions.EmailException;
 import com.lucaswilliam.meuprimeiroapp.service.exceptions.ObjectNotFoundException;
 import com.lucaswilliam.meuprimeiroapp.service.exceptions.ParseDateException;
 
@@ -48,6 +49,14 @@ public class ResourceExceptionHandler {
 		for(FieldError x: e.getBindingResult().getFieldErrors()) {
 			err.addError(new FieldMessage(x.getField(), x.getDefaultMessage()));
 		}
+		
+		return ResponseEntity.status(code).body(err);
+	}
+	
+	@ExceptionHandler(EmailException.class)
+	public ResponseEntity<StandardError> EmailException(EmailException e, HttpServletRequest http){
+		HttpStatus code = HttpStatus.REQUEST_TIMEOUT;
+		StandardError err = new StandardError(code.value(), e.getMessage(), http.getRequestURI(), System.currentTimeMillis());
 		
 		return ResponseEntity.status(code).body(err);
 	}

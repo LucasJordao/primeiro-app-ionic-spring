@@ -23,7 +23,6 @@ public class UsuarioDTO implements Serializable{
 	private String email;
 	@Size(min = 8, max = 80, message = "O tamanho tem que ser entre 8 e 80")
 	private String senha;
-	private Integer cargo;
 	private String fotoPerfil;
 	private boolean primeiroAcesso;
 	
@@ -37,17 +36,15 @@ public class UsuarioDTO implements Serializable{
 		this.nome = obj.getNome();
 		this.email = obj.getEmail();
 		this.senha = obj.getSenha();
-		this.cargo = obj.getCargo().getCode();
 		this.fotoPerfil = obj.getFotoPerfil();
 		this.primeiroAcesso = obj.getPrimeiroAcesso();
 	}
 	
-	public UsuarioDTO(Integer id, String nome, String email, String senha, Integer cargo, String fotoPerfil, boolean primeiroAcesso) {
+	public UsuarioDTO(Integer id, String nome, String email, String senha, String fotoPerfil, boolean primeiroAcesso) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
-		this.cargo = cargo;
 		this.fotoPerfil = fotoPerfil;
 		this.primeiroAcesso = primeiroAcesso;
 	}
@@ -83,14 +80,6 @@ public class UsuarioDTO implements Serializable{
 
 	public void setSenha(String senha) {
 		this.senha = senha;
-	}
-
-	public Integer getCargo() {
-		return cargo;
-	}
-
-	public void setCargo(Integer cargo) {
-		this.cargo = cargo;
 	}
 
 	public String getFotoPerfil() {

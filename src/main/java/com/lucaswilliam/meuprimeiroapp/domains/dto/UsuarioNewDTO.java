@@ -1,6 +1,9 @@
 package com.lucaswilliam.meuprimeiroapp.domains.dto;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -29,7 +32,7 @@ public class UsuarioNewDTO implements Serializable{
 	@NotEmpty(message = "Campo não pode ser vazio")
 	private String senha;
 	@NotNull(message = "Campo não pode ser vazio")
-	private Integer cargo;
+	private Set<Integer> cargos = new HashSet<>();
 	private String fotoPerfil;
 	
 	@NotNull(message = "Campo não pode ser vazio")
@@ -61,17 +64,16 @@ public class UsuarioNewDTO implements Serializable{
 		this.nome = obj.getNome();
 		this.email = obj.getEmail();
 		this.senha = obj.getSenha();
-		this.cargo = obj.getCargo().getCode();
+		this.cargos = obj.getAuthorities().stream().map(x -> x.getCode()).collect(Collectors.toSet());
 		this.fotoPerfil = obj.getFotoPerfil();
 	}
 	
-	public UsuarioNewDTO(String nome, String email, String senha, Integer cargo, String fotoPerfil, Telefone telefone1,
+	public UsuarioNewDTO(String nome, String email, String senha, String fotoPerfil, Telefone telefone1,
 			Telefone telefone2, Telefone telefone3, String logradouro, String cep, String complemento, String numero,
 			String bairro, Integer cidadeId, Integer organizacaoId) {
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
-		this.cargo = cargo;
 		this.fotoPerfil = fotoPerfil;
 		this.telefone1 = telefone1;
 		this.telefone2 = telefone2;
@@ -101,6 +103,14 @@ public class UsuarioNewDTO implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public Set<TipoCargo> getCargos(){
+		return cargos.stream().map(x -> TipoCargo.toEnum(x)).collect(Collectors.toSet());
+	}
+	
+	public void addCargo(TipoCargo cargo) {
+		cargos.add(cargo.getCode());
+	}
 
 	public String getSenha() {
 		return senha;
@@ -108,14 +118,6 @@ public class UsuarioNewDTO implements Serializable{
 
 	public void setSenha(String senha) {
 		this.senha = senha;
-	}
-
-	public TipoCargo getCargo() {
-		return TipoCargo.toEnum(cargo);
-	}
-
-	public void setCargo(TipoCargo cargo) {
-		this.cargo = cargo.getCode();
 	}
 
 	public String getFotoPerfil() {

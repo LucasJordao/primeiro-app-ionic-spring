@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +21,12 @@ import com.lucaswilliam.meuprimeiroapp.domains.dto.UsuarioDTO;
 import com.lucaswilliam.meuprimeiroapp.domains.dto.UsuarioNewDTO;
 import com.lucaswilliam.meuprimeiroapp.domains.enums.TipoCargo;
 import com.lucaswilliam.meuprimeiroapp.repositories.EnderecoRepository;
-import com.lucaswilliam.meuprimeiroapp.repositories.OrganizacaoRepository;
 import com.lucaswilliam.meuprimeiroapp.repositories.TelefoneRepository;
 import com.lucaswilliam.meuprimeiroapp.repositories.UsuarioRepository;
 import com.lucaswilliam.meuprimeiroapp.service.exceptions.DataIntegrityException;
+import com.lucaswilliam.meuprimeiroapp.service.exceptions.EmailException;
 import com.lucaswilliam.meuprimeiroapp.service.exceptions.ObjectNotFoundException;
+import com.lucaswilliam.meuprimeiroapp.service.utils.EmailService;
 
 @Service
 public class UsuarioService {
@@ -38,10 +40,18 @@ public class UsuarioService {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
-	
-	@Autowired
-	private OrganizacaoRepository organizacaoRepository;
 
+	@Autowired
+	private OrganizacaoService organizacaoService;
+
+	@Autowired
+	private CidadeService cidadeService;
+
+	@Autowired
+	private EmailService emailService;
+
+	@Autowired
+	private BCryptPasswordEncoder bcrypt;
 	/**
 	 * Metodo responsável por recuperar uma lista de usuarios do banco de dados
 	 * 
@@ -67,6 +77,7 @@ public class UsuarioService {
 
 	/**
 	 * Metodo responsável por atualizar usuario do banco de dados por meio do id
+	 * 
 	 * @param obj
 	 * @return void
 	 */
@@ -91,9 +102,10 @@ public class UsuarioService {
 
 		return repo.findAll(pageRequest);
 	}
-	
+
 	/**
 	 * Metodo responsavel por deletar usuario apartir do id
+	 * 
 	 * @param id
 	 * @return void
 	 */
@@ -104,48 +116,54 @@ public class UsuarioService {
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Você não pode deletar esse usuário, pois ele tem uma tarefa associada");
 		}
-	}/**
+	}
+
+	/**
 	 * Metodo responsável por inserir usuario no banco de dados
+	 * 
 	 * @param obj
 	 * @return Objeto do tipo Usuario
 	 */
-	@Transactional()
+	@Transactional(rollbackFor = EmailException.class)
 	public Usuario insert(Usuario obj) {
 		obj.setId(null);
 		List<Telefone> telefones = obj.getTelefones();
 		List<Endereco> end = obj.getEnderecosUsuario();
-		
+		obj.setSenha(bcrypt.encode(obj.getSenha()));
 		Usuario user = repo.save(obj);
 		enderecoRepository.saveAll(end);
 		telefoneRepository.saveAll(telefones);
+		emailService.sendCountConfirmationHtmlEmail(obj);
 		return user;
 	}
 
-	public List<Usuario> search(String nome){
+	/**
+	 * Metodo responsável por retornar usuarios por organizacao do banco de dados
+	 * 
+	 * @param nome
+	 * @return lista de objetos do tipo Usuario
+	 */
+	public List<Usuario> search(String nome) {
 		List<Usuario> list = repo.search(nome);
-		
+
 		return list;
 	}
-	
-	public List<Usuario> searchFuncionario(String nome){
-		List<Usuario> list = repo.searchFuncionario(nome);
-		
-		return list;
-	}
-	
+
 	// Methods aux
 	private static void updateData(Usuario obj, Usuario newObj) {
 		if (obj.getNome() != null) {
 			newObj.setNome(obj.getNome());
 		}
 		if (obj.getEmail() != null) {
-			newObj.setEmail(obj.getEmail());
+			newObj.setEmail(obj.getEmail().toLowerCase());
 		}
 		if (obj.getSenha() != null) {
 			newObj.setSenha(obj.getSenha());
 		}
-		if (obj.getCargo() != null) {
-			newObj.setCargo(obj.getCargo());
+		if (obj.getAuthorities() != null) {
+			for(TipoCargo cargo: obj.getAuthorities()) {
+				newObj.addAuthorities(cargo);
+			}
 		}
 		if (obj.getFotoPerfil() != null) {
 			newObj.setFotoPerfil(obj.getFotoPerfil());
@@ -154,44 +172,51 @@ public class UsuarioService {
 	}
 
 	public Usuario fromDTO(UsuarioDTO objDTO) {
-		return new Usuario(objDTO.getId(), objDTO.getNome(), objDTO.getEmail(), objDTO.getSenha(),
-				TipoCargo.toEnum(objDTO.getCargo()), null, objDTO.getPrimeiroAcesso());
+		return new Usuario(objDTO.getId(), objDTO.getNome(), objDTO.getEmail().toLowerCase(), objDTO.getSenha(),
+				null, objDTO.getPrimeiroAcesso());
 	}
 
 	/**
 	 * Metodo responsavel por converter um UsuarioNewDto para um Usuario
+	 * 
 	 * @param objDTO
 	 * @return Objeto do tipo Usuario
 	 */
 	public Usuario fromNewDTO(UsuarioNewDTO objDTO) {
-		Usuario user = new Usuario(null, objDTO.getNome(), objDTO.getEmail(), objDTO.getSenha(), objDTO.getCargo(),
+		Usuario user = new Usuario(null, objDTO.getNome(), objDTO.getEmail().toLowerCase(), objDTO.getSenha(),
 				objDTO.getFotoPerfil(), true);
-		Endereco end = new Endereco(null, objDTO.getLogradouro(), objDTO.getCep(), objDTO.getComplemento(), objDTO.getNumero(), objDTO.getBairro(), user, new Cidade(objDTO.getCidadeId(), null,null), null);
 		
-		Optional<Organizacao> org1 = organizacaoRepository.findById(objDTO.getOrganizacaoId());
-		Organizacao o1 = org1.get();
-		
-		user.getOrganizacoes().add(o1);
-		
-		o1.getUsuarios().add(user);
-		
+		for(TipoCargo x : objDTO.getCargos()) {
+			user.addAuthorities(x);
+		}
+
+		Cidade cid = cidadeService.findById(objDTO.getCidadeId());
+		Endereco end = new Endereco(null, objDTO.getLogradouro(), objDTO.getCep(), objDTO.getComplemento(),
+				objDTO.getNumero(), objDTO.getBairro(), user, cid, null);
+
+		Organizacao org1 = organizacaoService.findById(objDTO.getOrganizacaoId());
+
+		user.getOrganizacoes().add(org1);
+
+		org1.getUsuarios().add(user);
+
 		Telefone tel1 = objDTO.getTelefone1();
 		tel1.setUsuario(user);
 		user.getTelefones().add(tel1);
-		
-		if(objDTO.getTelefone2() != null) {
+
+		if (objDTO.getTelefone2() != null) {
 			Telefone tel2 = objDTO.getTelefone2();
 			tel2.setUsuario(user);
 			user.getTelefones().add(tel2);
 		}
-		if(objDTO.getTelefone3() != null) {
+		if (objDTO.getTelefone3() != null) {
 			Telefone tel3 = objDTO.getTelefone3();
 			tel3.setUsuario(user);
 			user.getTelefones().add(tel3);
 		}
-		
+
 		user.getEnderecosUsuario().add(end);
-		
+
 		return user;
 	}
 }

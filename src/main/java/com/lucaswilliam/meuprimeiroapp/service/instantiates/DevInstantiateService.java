@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lucaswilliam.meuprimeiroapp.domains.Organizacao;
@@ -33,11 +34,20 @@ public class DevInstantiateService {
 
 	@Autowired
 	private TarefaRepository tarefaRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder bcrypt;
 
 	public void instantiate() throws ParseException {
 		// Instanciando Usuario, Organização e Telefone
-		Usuario u1 = new Usuario(null, "Lucas William", "Lucas@hotmail.com", "123", TipoCargo.CHEFE, null, true);
-		Usuario u2 = new Usuario(null, "Marcos Santos", "marcos@hotmail.com", "123", TipoCargo.FUNCIONARIO, null, true);
+		Usuario u1 = new Usuario(null, "Lucas William", "Lucas@hotmail.com", bcrypt.encode("12345678"), null, true);
+		Usuario u2 = new Usuario(null, "Marcos Santos", "marcos@hotmail.com", bcrypt.encode("12345678"), null, true);
+		
+		
+		Usuario u3 = new Usuario(null, "Lucas William Silva Jordão", "lucasw@hotmail.com", bcrypt.encode("12345678"), null, true);
+		Usuario u4 = new Usuario(null, "Marcos Santos", "marcos23@hotmail.com", bcrypt.encode("12345678"), null, true);
+		u4.addAuthorities(TipoCargo.CHEFE);
+		u3.addAuthorities(TipoCargo.CHEFE);
 
 		Organizacao o1 = new Organizacao(null, "Energisa", null, "Trazendo energia desde 1989");
 		Organizacao o2 = new Organizacao(null, "LG", null, "Fazendo sua imagem melhor");
@@ -50,15 +60,16 @@ public class DevInstantiateService {
 
 		u1.getOrganizacoes().addAll(Arrays.asList(o1));
 		u2.getOrganizacoes().addAll(Arrays.asList(o1));
+		u4.getOrganizacoes().addAll(Arrays.asList(o1));
 
-		o1.getUsuarios().addAll(Arrays.asList(u1, u2));
+		o1.getUsuarios().addAll(Arrays.asList(u1, u2, u4));
 
 		u1.getTelefones().addAll(Arrays.asList(tel1, tel3));
 		u2.getTelefones().addAll(Arrays.asList(tel2));
 		o1.getTelefonesOrganizacao().addAll(Arrays.asList(tel4));
 
 		organizacaoRepository.saveAll(Arrays.asList(o1, o2, o3));
-		usuarioRepository.saveAll(Arrays.asList(u1, u2));
+		usuarioRepository.saveAll(Arrays.asList(u1, u2, u4, u3));
 		telefoneRepository.saveAll(Arrays.asList(tel1, tel2, tel3, tel4));
 
 		// Instanciando Cidade, Estado e Endereco

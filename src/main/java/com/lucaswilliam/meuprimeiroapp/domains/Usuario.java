@@ -2,10 +2,16 @@ package com.lucaswilliam.meuprimeiroapp.domains;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +37,6 @@ public class Usuario implements Serializable{
 	private String nome;
 	private String email;
 	private String senha;
-	private Integer cargo;
 	private String fotoPerfil;
 	private boolean primeiroAcesso;
 	
@@ -52,18 +57,21 @@ public class Usuario implements Serializable{
 	@ManyToMany(mappedBy = "usuario")
 	private List<Tarefa> tarefas = new ArrayList<>();
 	
+	@ElementCollection(fetch=FetchType.EAGER)
+	@CollectionTable(name="CARGOS")
+	private Set<Integer> cargos = new HashSet<>();
 	
 	//Constructors and Overloads
 	public Usuario() {
-		
+		this.addAuthorities(TipoCargo.FUNCIONARIO);
 	}
 
-	public Usuario(Integer id, String nome, String email, String senha, TipoCargo cargo, String fotoPerfil, boolean primeiroAcesso) {
+	public Usuario(Integer id, String nome, String email, String senha, String fotoPerfil, boolean primeiroAcesso) {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
-		this.cargo = (cargo == null) ? null : cargo.getCode();
+		this.addAuthorities(TipoCargo.FUNCIONARIO);
 		this.fotoPerfil = fotoPerfil;
 		this.primeiroAcesso = primeiroAcesso;
 	}
@@ -100,13 +108,13 @@ public class Usuario implements Serializable{
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-
-	public TipoCargo getCargo() {
-		return TipoCargo.toEnum(cargo);
+	
+	public Set<TipoCargo> getAuthorities(){
+		return cargos.stream().map(x -> TipoCargo.toEnum(x)).collect(Collectors.toSet());
 	}
-
-	public void setCargo(TipoCargo cargo) {
-		this.cargo = cargo.getCode();
+	
+	public void addAuthorities(TipoCargo cargo) {
+		cargos.add(cargo.getCode());
 	}
 
 	public String getFotoPerfil() {

@@ -9,7 +9,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.lucaswilliam.meuprimeiroapp.domains.enums.TipoPrioridade;
+import com.lucaswilliam.meuprimeiroapp.service.validation.InserirTarefa;
 
+@InserirTarefa
 public class TarefaNewDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;

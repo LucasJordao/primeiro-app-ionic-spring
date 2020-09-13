@@ -91,4 +91,9 @@ public class TarefaDTO implements Serializable{
 		this.concluido = concluido;
 	}
 	
+	public boolean getExpirou() {
+		Date now = new Date(System.currentTimeMillis());
+			return dataPrazo.before(now);
+	}
+	
 }

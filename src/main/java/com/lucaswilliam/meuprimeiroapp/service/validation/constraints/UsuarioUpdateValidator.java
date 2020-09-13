@@ -17,43 +17,46 @@ import com.lucaswilliam.meuprimeiroapp.repositories.UsuarioRepository;
 import com.lucaswilliam.meuprimeiroapp.resources.exceptions.FieldMessage;
 import com.lucaswilliam.meuprimeiroapp.service.validation.UpdateUsuario;
 
-public class UsuarioUpdateValidator implements ConstraintValidator<UpdateUsuario, UsuarioDTO>{
-	
+public class UsuarioUpdateValidator implements ConstraintValidator<UpdateUsuario, UsuarioDTO> {
+
 	@Autowired
 	private HttpServletRequest request;
-	
+
 	@Autowired
 	private UsuarioRepository repository;
-	
+
 	@Override
 	public void initialize(UpdateUsuario ann) {
 	}
-	
+
 	@Override
 	public boolean isValid(UsuarioDTO value, ConstraintValidatorContext context) {
-		
+
 		@SuppressWarnings("unchecked")
-		Map<String, String> map = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-		
+		Map<String, String> map = (Map<String, String>) request
+				.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+
 		List<FieldMessage> list = new ArrayList<>();
-		
+
 		Integer mapId = Integer.parseInt(map.get("id"));
-		
+
 		Usuario user = repository.findByEmail(value.getEmail());
-		
-		if(user != null && !user.getId().equals(mapId)) {
+
+		if (user != null && !user.getId().equals(mapId)) {
 			list.add(new FieldMessage("email", "Email já em uso"));
 		}
-		
+
+		if(user != null && value.getEmail().toLowerCase().equals(user.getEmail().toLowerCase())) {
+			list.add(new FieldMessage("email", "Email já em uso"));
+		}
 		
 		for (FieldMessage e : list) {
 			context.disableDefaultConstraintViolation();
 			context.buildConstraintViolationWithTemplate(e.getMessage()).addPropertyNode(e.getField())
 					.addConstraintViolation();
 		}
-		
+
 		return list.isEmpty();
 	}
-	
-	
+
 }

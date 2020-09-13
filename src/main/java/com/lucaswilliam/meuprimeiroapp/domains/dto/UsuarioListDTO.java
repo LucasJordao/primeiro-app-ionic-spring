@@ -3,7 +3,6 @@ package com.lucaswilliam.meuprimeiroapp.domains.dto;
 import java.io.Serializable;
 
 import com.lucaswilliam.meuprimeiroapp.domains.Usuario;
-import com.lucaswilliam.meuprimeiroapp.domains.enums.TipoCargo;
 
 public class UsuarioListDTO implements Serializable{
 
@@ -13,7 +12,6 @@ public class UsuarioListDTO implements Serializable{
 	private Integer id;
 	private String nome;
 	private String email;
-	private Integer cargo;
 	private String fotoPerfil;
 	private boolean primeiroAcesso;
 	
@@ -26,15 +24,13 @@ public class UsuarioListDTO implements Serializable{
 		this.id = obj.getId();
 		this.nome = obj.getNome();
 		this.email = obj.getEmail();
-		this.cargo = (obj.getCargo() == null) ? null : obj.getCargo().getCode();
 		this.fotoPerfil = obj.getFotoPerfil();
 		this.primeiroAcesso = obj.getPrimeiroAcesso();
 	}
 
-	public UsuarioListDTO(Integer id, String nome, String email, Integer cargo, String fotoPerfil, boolean primeiroAcesso) {
+	public UsuarioListDTO(Integer id, String nome, String email, String fotoPerfil, boolean primeiroAcesso) {
 		this.nome = nome;
 		this.email = email;
-		this.cargo = cargo;
 		this.fotoPerfil = fotoPerfil;
 		this.primeiroAcesso = primeiroAcesso;
 	}
@@ -62,14 +58,6 @@ public class UsuarioListDTO implements Serializable{
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public TipoCargo getCargo() {
-		return TipoCargo.toEnum(cargo);
-	}
-
-	public void setCargo(TipoCargo cargo) {
-		this.cargo = cargo.getCode();
 	}
 
 	public String getFotoPerfil() {

@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.lucaswilliam.meuprimeiroapp.domains.Tarefa;
 import com.lucaswilliam.meuprimeiroapp.domains.Usuario;
 import com.lucaswilliam.meuprimeiroapp.domains.dto.UsuarioDTO;
 import com.lucaswilliam.meuprimeiroapp.domains.dto.UsuarioListDTO;
 import com.lucaswilliam.meuprimeiroapp.domains.dto.UsuarioNewDTO;
+import com.lucaswilliam.meuprimeiroapp.service.TarefaService;
 import com.lucaswilliam.meuprimeiroapp.service.UsuarioService;
 
 @RestController
@@ -32,6 +35,9 @@ public class UsuarioResource {
 	
 	@Autowired
 	private UsuarioService service;
+	
+	@Autowired
+	private TarefaService tarefaService;
 	
 	//EndPoints (Rotas)
 	@GetMapping
@@ -70,6 +76,7 @@ public class UsuarioResource {
 		return ResponseEntity.ok().body(list);
 	}
 	
+	@PreAuthorize("hasAnyRole('CHEFE')")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Integer id){
 		service.delete(id);
@@ -77,6 +84,7 @@ public class UsuarioResource {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@PreAuthorize("hasAnyRole('CHEFE')")
 	@PostMapping
 	public ResponseEntity<Void> insert(@Valid @RequestBody UsuarioNewDTO obj){
 		Usuario user = service.insert(service.fromNewDTO(obj));
@@ -87,16 +95,16 @@ public class UsuarioResource {
 	}
 	
 	@GetMapping(value = "/organizacoes")
-	public ResponseEntity<List<Usuario>> search(@RequestParam(name = "nome") String nome){
-		List<Usuario> list = service.search(nome);
+	public ResponseEntity<List<Usuario>> search(@RequestParam(name = "org", defaultValue = "") String org){
+		List<Usuario> list = service.search(org);
 		
 		return ResponseEntity.ok().body(list);
 	}
 	
-	@GetMapping(value = "/funcionarios")
-	public ResponseEntity<List<Usuario>> serachFuncionario(@RequestParam(name = "org")  String org){
-		List<Usuario> list = service.searchFuncionario(org);
+	@GetMapping(value = "/{usuarioId}/tarefas")
+	public ResponseEntity<List<Tarefa>> findByTarefa(@PathVariable Integer usuarioId){
+		List<Tarefa> tarefas = tarefaService.findByUsuario(usuarioId);
 		
-		return ResponseEntity.ok().body(list);
+		return ResponseEntity.ok().body(tarefas);
 	}
 }

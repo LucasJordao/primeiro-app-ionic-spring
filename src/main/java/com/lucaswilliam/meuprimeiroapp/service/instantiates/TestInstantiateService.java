@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lucaswilliam.meuprimeiroapp.domains.Cidade;
@@ -44,11 +45,15 @@ public class TestInstantiateService {
 
 		@Autowired
 		private TarefaRepository tarefaRepository;
+		
+		@Autowired
+		private BCryptPasswordEncoder bcrypt;
 
 		public void instantiate() throws ParseException {
 			// Instanciando Usuario, Organização e Telefone
-			Usuario u1 = new Usuario(null, "Lucas William", "Lucas@hotmail.com", "123", TipoCargo.CHEFE, null, true);
-			Usuario u2 = new Usuario(null, "Marcos Santos", "marcos@hotmail.com", "123", TipoCargo.FUNCIONARIO, null, true);
+			Usuario u1 = new Usuario(null, "Lucas William", "Lucas@hotmail.com", bcrypt.encode("123"), null, true);
+			Usuario u2 = new Usuario(null, "Marcos Santos", "marcos@hotmail.com", bcrypt.encode("123"), null, true);
+			u2.addAuthorities(TipoCargo.CHEFE);
 
 			Organizacao o1 = new Organizacao(null, "Energisa", null, "Trazendo energia desde 1989");
 			Organizacao o2 = new Organizacao(null, "LG", null, "Fazendo sua imagem melhor");

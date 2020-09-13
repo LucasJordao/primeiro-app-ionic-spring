@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Sending Email with Thymeleaf HTML Template Example</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href='http://fonts.googleapis.com/css?family=Roboto'
+	rel='stylesheet' type='text/css'>
+
+	<!-- use the font -->
+	<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	font-size: 48px;
+}
+</style>
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tbody>
+    <tr>
+      <td align="center" class="x_minwidth" style="min-width: 512px; background-color:#f3f3f3">
+        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+          <tbody>
+            <tr>
+              <td>
+                 <table width="100%" border="0" align="center" cellspancig="0" cellpadding="0">
+                   <tbody>
+                     <tr>
+                       <td aling="center">
+                         <table class="x_w100" style="background-color:#151515;" align="center" width="512" border="0" cellspacing="0" cellpadding="0">
+                           <tr>
+                             <td align="center">
+                               <img width="180" src="https://uploaddeimagens.com.br/images/002/734/709/full/CatrixLogoBranca.png?1593302344"/>
+                             </td>
+                           </tr>
+                           <tr>
+                             <td class="x_padt10m x_padb10m" align="center" padding:10px;>
+                               <table cellspacing="0" border="0" cellpadding="10px" align="center" style="padding:10px; background:#424242;" width="512" >
+                               <tbody>
+                                 <tr style="background:white;" >
+                                   <td style="text-align:center; width:100%; border-bottom:1px solid gray; padding:20px 10px 20px 10px;"><h3>Olá, <span th:text="${usuario.nome}"></span>! Seja Bem-vindo</h3></td>
+                                  </tr>
+                                 <tr style="background:white;">
+                                   <td style="width:100%;">
+                                     <table border="0" cellpadding="0" cellspacing="0" width="512" style="padding:20px 30px;">
+                                       <tbody>
+                                         <tr >
+                                           <td align="center" style="background:#FE5353; width:300px; border-radius:10px; padding:10px 0; font-size:15px; font-weight:600;">
+                                             Essa imagem contém informações restritas           
+                                           </td>
+                                         </tr>
+                                         <tr>
+                                           <td>
+                                             <h3 style="margin-left:20px; margin-top:20px;">Dados de acesso:</h3>
+                                             <p style="margin-top:-8px; font-size:17px; margin-left:20px;">Email: <span style="color:#116BE2;" th:text="${usuario.email}"></span></p>
+                                             <p style="margin-top:-20px; font-size:17px; margin-left:20px;">Senha: <span style="color:#116BE2;" th:text="${usuario.senha}"></span></p>
+                                           </td>
+                                         </tr>
+                                       </tbody>
+                                     </table>
+                                   </td>
+                                  </tr>
+                               </tbody>
+                             </table>
+                             </td>
+                           </tr>
+                           <tr>
+                             <!---Scopo footer-->
+                             <td>
+                               <table border="0" cellspacing="0" cellpadding="0" width="512">
+                                 <tbody>
+                                   <tr>
+                                     <td style="color:white; padding:12px; text-align:center; width:100%;"><span style="font-size:12px;">Catrix - Empresa de softwares ©</span></td>
+                                   </tr>
+                                 </tbody>
+                               </table>
+                             </td>
+                           </tr>
+                         </table>
+                       </td>
+                     </tr>
+                   </tbody>
+                 </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

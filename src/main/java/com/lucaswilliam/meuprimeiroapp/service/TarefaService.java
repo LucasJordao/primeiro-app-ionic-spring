@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lucaswilliam.meuprimeiroapp.documents.Notificacao;
 import com.lucaswilliam.meuprimeiroapp.domains.Tarefa;
 import com.lucaswilliam.meuprimeiroapp.domains.Usuario;
 import com.lucaswilliam.meuprimeiroapp.domains.dto.TarefaNewDTO;
@@ -33,7 +34,10 @@ public class TarefaService {
 	
 	@Autowired
 	private UsuarioService usuarioService;
-
+	
+	@Autowired
+	private NotificacaoService notificacaoService;
+	
 	/**
 	 * Metodo responsável por recuperar uma lista de tarefas do banco de dados
 	 * 
@@ -90,11 +94,21 @@ public class TarefaService {
 	 * @param obj
 	 * 
 	 * @return Objeto do tipo Tarefa
+	 * @throws ParseException 
 	 */
 	@Transactional
-	public Tarefa insert(Tarefa obj) {
+	public Tarefa insert(Tarefa obj, Integer destinatarioId, Integer remetenteId) throws ParseException {
 		obj.setId(null);
+		
+		usuarioService.findById(remetenteId);
+		
 		Tarefa newTarefa = repo.save(obj);
+		
+		String conteudo = "criou uma nova tarefa.";
+		Date instante = sdf2.parse(sdf2.format(new Date()));
+		
+		Notificacao not = new Notificacao(null, conteudo, "", false, remetenteId, destinatarioId, newTarefa.getId(), instante);
+		notificacaoService.insert(not);
 		
 		return newTarefa;
 	}
@@ -111,6 +125,14 @@ public class TarefaService {
 	public Page<Tarefa> findPage(Integer page, Integer linePerPage, String direction, String orderBy){
 		PageRequest obj = PageRequest.of(page, linePerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(obj);
+	}
+	
+	
+	public List<Tarefa> findByUsuario(Integer usuarioId){
+		usuarioService.findById(usuarioId);
+		List<Tarefa> tarefas = repo.findByUsuario(usuarioId);
+		
+		return tarefas;
 	}
 	
 	//Methods aux

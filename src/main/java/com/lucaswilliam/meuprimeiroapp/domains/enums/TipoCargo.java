@@ -3,8 +3,8 @@ package com.lucaswilliam.meuprimeiroapp.domains.enums;
 public enum TipoCargo{
 	
 	//Attributes
-	FUNCIONARIO(1, "funcionário"),
-	CHEFE(2, "chefe");
+	FUNCIONARIO(1, "ROLE_FUNCIONARIO"),
+	CHEFE(2, "ROLE_CHEFE");
 	
 	private int code;
 	private String descricao;
